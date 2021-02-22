@@ -10,7 +10,7 @@ RUN box upgrade --force
 
 RUN box coldbox create app name=stachebox skeleton=supersimple
 
-RUN box install stachebox@1.0.1 --production
+RUN box install stachebox@1.0.2 --production
 
 RUN rm -f /app/config/Coldbox.cfc
 
