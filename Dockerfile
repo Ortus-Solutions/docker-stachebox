@@ -36,7 +36,7 @@ COPY --from=workbench /usr/local/bin/startup-final.sh /usr/local/bin/run.sh
 WORKDIR /app
 
 # Healthcheck environment variables
-ENV HEALTHCHECK_URI "http://127.0.0.1:${PORT}/?healthcheck=true"
+ENV HEALTHCHECK_URI "http://127.0.0.1:8080/?healthcheck=true"
 
 # Our healthcheck interval doesn't allow dynamic intervals - Default is 20s intervals with 15 retries
 HEALTHCHECK --interval=20s --timeout=30s --retries=15 CMD curl --fail ${HEALTHCHECK_URI} || exit 1
