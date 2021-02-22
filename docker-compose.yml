@@ -3,28 +3,39 @@ version: "3"
 # Test compose file for building a stachebox stack
 services:
   elasticsearch:
-    build: 
-      context: ./build/elasticsearch
-      args:
-        ELASTIC_PASSWORD: "5t4ch380x!"
-        LOGSTASH_PASSWORD: "L0g5t4ch3!"
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    volumes:
+      - /opt/shared-data/docker-stacks/stachebox/elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - "9201:9200"
+      - "9301:9300"
     environment:
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
       - discovery.type=single-node
       - bootstrap.memory_lock=true
+      - http.max_content_length=1024mb
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=5t4ch380x!
+      - KIBANA_SYSTEM_PASSWORD=5t4ch380x!
+      - APM_SYSTEM_PASSWORD=5t4ch380x!
+      - REMOTE_MONITORING_USER_PASSWORD=5t4ch380x!
+      - LOGSTASH_SYSTEM_PASSWORD=L0g5t4ch3!
+      - BEATS_SYSTEM_PASSWORD=L0g5t4ch3!
+    restart: on-failure:5
 
   stachebox:
-    build: .
-    depends_on:
-      - elasticsearch
+    image: ortussolutions/stachebox:latest
     ports:
-      - "61656:8080"
+      - "61686:8080"
     environment:
       ENVIRONMENT: production
       ELASTICSEARCH_HOST: elasticsearch
       ELASTICSEARCH_USERNAME: elastic
       ELASTICSEARCH_PASSWORD: "5t4ch380x!"
-      STACHEBOX_ADMIN_EMAIL: info@ortussolutions.com
+      STACHEBOX_ADMIN_EMAIL: stachebox@ortussolutions.com
       STACHEBOX_ADMIN_PASSWORD: "5t4ch380x!"
+      HEALTHCHECK_URI: http://127.0.0.1:8080/?healthcheck=true
+    restart: on-failure:5
