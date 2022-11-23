@@ -5,9 +5,6 @@ RUN rm -rf /app && mkdir -p /app
 
 WORKDIR /app
 
-## Force install commandbox so we restore our modules
-RUN box upgrade --force
-
 RUN box coldbox create app name=stachebox skeleton=supersimple
 
 RUN box install stachebox --production
