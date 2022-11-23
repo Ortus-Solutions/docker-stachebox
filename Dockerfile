@@ -5,6 +5,13 @@ RUN rm -rf /app && mkdir -p /app
 
 WORKDIR /app
 
+RUN mv ${COMMANDBOX_HOME}/cfml/system/config/urlrewrite.xml /tmp/urlrewrite.xml
+
+## Force install commandbox so we restore our modules
+RUN box upgrade --force
+
+RUN mv /tmp/urlrewrite.xml ${COMMANDBOX_HOME}/cfml/system/config/urlrewrite.xml
+
 RUN box coldbox create app name=stachebox skeleton=supersimple
 
 RUN box install stachebox --production
