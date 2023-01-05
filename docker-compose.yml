@@ -5,7 +5,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
     volumes:
-      - /opt/shared-data/docker-stacks/stachebox/elasticsearch/data:/usr/share/elasticsearch/data
+      - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9201:9200"
       - "9301:9300"
@@ -39,3 +39,6 @@ services:
       STACHEBOX_ADMIN_PASSWORD: "5t4ch380x!"
       HEALTHCHECK_URI: http://127.0.0.1:8080/?healthcheck=true
     restart: on-failure:5
+
+volumes:
+  elasticsearch-data:

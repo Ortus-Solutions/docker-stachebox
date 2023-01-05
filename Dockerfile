@@ -5,13 +5,6 @@ RUN rm -rf /app && mkdir -p /app
 
 WORKDIR /app
 
-RUN mv ${COMMANDBOX_HOME}/cfml/system/config/urlrewrite.xml /tmp/urlrewrite.xml
-
-## Force install commandbox so we restore our modules
-RUN box upgrade --force
-
-RUN mv /tmp/urlrewrite.xml ${COMMANDBOX_HOME}/cfml/system/config/urlrewrite.xml
-
 RUN box coldbox create app name=stachebox skeleton=supersimple
 
 RUN box install stachebox --production
@@ -25,7 +18,7 @@ ENV FINALIZE_STARTUP true
 RUN $BUILD_DIR/run.sh
 
 # Debian Slim is the smallest OpenJDK image on that kernel. For most apps, this should work to run your applications
-FROM adoptopenjdk/openjdk11:debianslim-jre as app
+FROM eclipse-temurin:11-jre-focal as app
 
 # COPY our generated files
 COPY --from=workbench /app /app
@@ -36,6 +29,9 @@ RUN mkdir -p /usr/local/lib/CommandBox/lib
 
 COPY --from=workbench /usr/local/lib/CommandBox/lib/runwar-* /usr/local/lib/CommandBox/lib/
 COPY --from=workbench /usr/local/bin/startup-final.sh /usr/local/bin/run.sh
+
+RUN mkdir -p /usr/local/lib/CommandBox/cfml/system/config
+COPY --from=workbench /usr/local/lib/CommandBox/cfml/system/config/urlrewrite.xml /usr/local/lib/CommandBox/cfml/system/config/urlrewrite.xml
 
 WORKDIR /app
 
