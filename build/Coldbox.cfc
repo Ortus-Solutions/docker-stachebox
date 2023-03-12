@@ -9,7 +9,7 @@ component{
             appName 				= "Stachebox",
 
             //Development Settings
-            reinitPassword			= getSystemSetting( "REINIT_PASSWORD", ""),
+            reinitPassword			= getSystemSetting( "COLDBOX_REINIT_PASSWORD", ""),
             handlersIndexAutoReload = false,
 
             //Error/Exception Handling
