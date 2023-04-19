@@ -18,7 +18,7 @@ ENV FINALIZE_STARTUP true
 RUN $BUILD_DIR/run.sh
 
 # Debian Slim is the smallest OpenJDK image on that kernel. For most apps, this should work to run your applications
-FROM eclipse-temurin:11-jre-focal as app
+FROM eclipse-temurin:11-jre-jammy as app
 
 # COPY our generated files
 COPY --from=workbench /app /app
