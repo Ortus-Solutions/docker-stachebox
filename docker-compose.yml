@@ -3,7 +3,7 @@ version: "3"
 # Test compose file for building a stachebox stack
 services:
 
-elasticsearch:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -19,7 +19,6 @@ elasticsearch:
     ports:
       - "9200:9200"
       - "9300:9300"
-
   stachebox:
     image: ortussolutions/stachebox:latest
     ports:

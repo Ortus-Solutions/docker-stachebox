@@ -5,7 +5,7 @@ RUN rm -rf /app && mkdir -p /app
 
 WORKDIR /app
 
-RUN box coldbox create app name=stachebox skeleton=default && rm -rf testbox
+RUN box coldbox create app name=stachebox skeleton=supersimple && box install --force coldbox@7 && rm -rf testbox
 
 RUN box install stachebox --production
 
