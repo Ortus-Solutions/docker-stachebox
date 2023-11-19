@@ -19,6 +19,19 @@ jobs:
               uses: docker/setup-qemu-action@master
               with:
                   platforms: all
+            - name: Setup Environment Variables For Build Process
+              id: current_version
+              run: |
+                box install stachebox --production
+                echo "VERSION=`cat modules/stachebox/box.json | jq '.version' -r`" >> $GITHUB_ENV
+                box package set version=@build.version@+@build.number@
+                # main or snapshot
+                echo "Github Ref is $GITHUB_REF"
+                echo "BRANCH=main" >> $GITHUB_ENV
+                if [ $GITHUB_REF == 'refs/heads/development' ]
+                then
+                  echo "BRANCH=development" >> $GITHUB_ENV
+                fi
 
             - name: Setup Builds
               id: setup
@@ -31,10 +44,12 @@ jobs:
                   elif [[ $GITHUB_REF == 'refs/heads/development' ]]; then
                     # Snapshot builds
                     BUILD_IMAGE_TAG=snapshot
+                    VERSION_TAG = snapshot-${{ env.VERSION }}
                   else
                     BUILD_IMAGE_TAG=latest
+                    VERSION_TAG=${{ env.VERSION }}
                   fi
-                  TAGS="${DOCKER_IMAGE}:${BUILD_IMAGE_TAG}"
+                  TAGS="${DOCKER_IMAGE}:${BUILD_IMAGE_TAG},${DOCKER_IMAGE}:${VERSION_TAG}"
                   # Set output parameters.
                   echo "IMAGE_TAG=${TAGS}" >> $GITHUB_ENV
 
