@@ -7,6 +7,8 @@ on:
             - development
         tags:
             - v*
+env:
+  VERSION: 2.0.6
 
 jobs:
     publish:
@@ -19,19 +21,6 @@ jobs:
               uses: docker/setup-qemu-action@master
               with:
                   platforms: all
-            - name: Setup Java
-              uses: actions/setup-java@v3.9.0
-              with:
-                distribution: "temurin"
-                java-version: "11"
-            - name: Setup CommandBox
-              uses: Ortus-Solutions/setup-commandbox@v2.0.1
-            - name: Setup Environment Variables For Build Process
-              id: current_version
-              run: |
-                box install stachebox --production
-                echo "VERSION=`cat modules/stachebox/box.json | jq '.version' -r`" >> $GITHUB_ENV
-
             - name: Setup Builds
               id: setup
               env:
