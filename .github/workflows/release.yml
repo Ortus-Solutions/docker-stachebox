@@ -24,14 +24,6 @@ jobs:
               run: |
                 box install stachebox --production
                 echo "VERSION=`cat modules/stachebox/box.json | jq '.version' -r`" >> $GITHUB_ENV
-                box package set version=@build.version@+@build.number@
-                # main or snapshot
-                echo "Github Ref is $GITHUB_REF"
-                echo "BRANCH=main" >> $GITHUB_ENV
-                if [ $GITHUB_REF == 'refs/heads/development' ]
-                then
-                  echo "BRANCH=development" >> $GITHUB_ENV
-                fi
 
             - name: Setup Builds
               id: setup
