@@ -47,7 +47,9 @@ component{
 
         moduleSettings = {
             "cbsecurity" : {
-                "userService" : "UserService@stachebox"
+                "authentication" : {
+                    "userService" : "UserService@stachebox"
+                }
             },
             "cbauth" : {
                 "userServiceClass" : "UserService@stachebox"
@@ -56,7 +58,7 @@ component{
                 "isStandalone" : true
             },
             "logstash" : {
-                "applicationName" : "StacheboxContainer"
+                "applicationName" : getSystemSetting( "APPLICATION_NAME", "Stachebox Service" )
             }
         };
 
